@@ -19,12 +19,52 @@ export default function ManageStudents() {
       });
   }, []);
 
-  const handleView = (id) => {
+  const handleEdit = (e, id) => {
+    e.preventDefault();
+    const form = e.target;
+    const firstName = form.firstName.value;
+    const middleName = form.middleName.value;
+    const lastName = form.lastName.value;
+    const studentClass = form.class.value;
+    const division = form.division.value;
+    const roll = form.roll.value;
+    const address1 = form.address1.value;
+    const address2 = form.address2.value;
+    const landmark = form.landmark.value;
+    const city = form.city.value;
+    const pinCode = form.pinCode.value;
 
+    const data = {
+      firstName,
+      middleName,
+      lastName,
+      studentClass,
+      division,
+      roll,
+      address1,
+      address2,
+      landmark,
+      city,
+      pinCode,
+    }
+    axios.patch(`https://students-management-system-server.vercel.app/students?id=${id}`, data)
+      .then(res => {
+        if (res.data.modifiedCount >= 1) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Student data saved",
+            showConfirmButton: false,
+            timer: 1500
+          });
+          axios.get("https://students-management-system-server.vercel.app/students")
+            .then(res => {
+              setStudents(res.data)
+            });
+        }
+      })
   }
-  const handleEdit = (id) => {
 
-  }
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -36,7 +76,7 @@ export default function ManageStudents() {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`http://localhost:4000/students?id=${id}`)
+        axios.delete(`https://students-management-system-server.vercel.app/students?id=${id}`)
           .then(res => {
             if (res.data.deletedCount >= 1) {
               Swal.fire({
@@ -122,12 +162,12 @@ export default function ManageStudents() {
                       </button>
                       <div className="header">{`${student.firstName} ${student.middleName} ${student.lastName}`}</div>
                       <div className="content">
-                        <form onSubmit={() => handleEdit(student.id)} className="grid grid-cols-6 gap-4">
-                          <input type="text" name="firstName" placeholder="First Name" required className="col-span-2 p-2 border rounded" />
-                          <input type="text" name="middleName" placeholder="Middle Name" className="col-span-2 p-2 border rounded" />
-                          <input type="text" name="lastName" placeholder="Last Name" required className="col-span-2 p-2 border rounded" />
+                        <form onSubmit={(event) => handleEdit(event, student._id)} className="grid grid-cols-6 gap-4">
+                          <input type="text" name="firstName" defaultValue={student.firstName} required className="col-span-2 p-2 border rounded" />
+                          <input type="text" name="middleName" defaultValue={student.middleName} className="col-span-2 p-2 border rounded" />
+                          <input type="text" name="lastName" defaultValue={student.lastName} required className="col-span-2 p-2 border rounded" />
 
-                          <select name="class" defaultValue="Select Class" className="col-span-2 p-2 border rounded">
+                          <select name="class" defaultValue={student.studentClass} className="col-span-2 p-2 border rounded">
                             <option value="Select Class" disabled>Select Class</option>
                             <option value="Class 1">Class 1</option>
                             <option value="Class 2">Class 2</option>
@@ -142,7 +182,7 @@ export default function ManageStudents() {
                             <option value="Class 11">Class 11</option>
                             <option value="Class 12">Class 12</option>
                           </select>
-                          <select name="division" defaultValue="Select Division" className="col-span-2 p-2 border rounded">
+                          <select name="division" defaultValue={student.division} className="col-span-2 p-2 border rounded">
                             <option value="Select Division" disabled>Select Division</option>
                             <option value="Dhaka">Dhaka</option>
                             <option value="Chattogram">Chattogram</option>
@@ -154,13 +194,13 @@ export default function ManageStudents() {
                             <option value="Barisal">Barisal</option>
                           </select>
 
-                          <input type="number" name="roll" placeholder="Enter Roll Numver in Digits" required className="col-span-2 p-2 border rounded" />
-                          <input type="text" name="address1" placeholder="Address Line 1" className="col-span-3 p-2 border rounded" />
-                          <input type="text" name="address2" placeholder="Address Line 2" className="col-span-3 p-2 border rounded" />
-                          <input type="text" name="landmark" placeholder="Landmark" className="col-span-2 p-2 border rounded" />
-                          <input type="text" name="city" placeholder="City" className="col-span-2 p-2 border rounded" />
-                          <input type="text" name="pinCode" placeholder="Pin Code" className="col-span-2 p-2 border rounded" />
-                          <input type="submit" className="col-span-2 px-4 py-2 bg-red-500 rounded text-white font-bold cursor-pointer" />
+                          <input type="number" name="roll" defaultValue={student.roll} required className="col-span-2 p-2 border rounded" />
+                          <input type="text" name="address1" defaultValue={student.address1} className="col-span-3 p-2 border rounded" />
+                          <input type="text" name="address2" defaultValue={student.address2} className="col-span-3 p-2 border rounded" />
+                          <input type="text" name="landmark" defaultValue={student.landmark} className="col-span-2 p-2 border rounded" />
+                          <input type="text" name="city" defaultValue={student.city} className="col-span-2 p-2 border rounded" />
+                          <input type="text" name="pinCode" defaultValue={student.pinCode} className="col-span-2 p-2 border rounded" />
+                          <input type="submit" value="Update" className="col-span-2 px-4 py-2 bg-red-500 rounded text-white font-bold cursor-pointer" />
 
                         </form>
                       </div>
@@ -168,7 +208,6 @@ export default function ManageStudents() {
                   )}
                 </Popup>
 
-                <button onClick={() => handleEdit(student._id)}><CiEdit className="text-3xl text-red-500" /></button>
                 <button onClick={() => handleDelete(student._id)}><RiDeleteBin6Line className="text-3xl text-red-500" /></button>
               </td>
 

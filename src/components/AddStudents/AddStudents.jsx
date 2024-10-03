@@ -51,8 +51,6 @@ export default function AddStudents() {
                 form.city.value = "";
                 form.pinCode.value = "";
             })
-
-
     }
 
     return (
@@ -96,7 +94,7 @@ export default function AddStudents() {
                 <input type="text" name="landmark" placeholder="Landmark" className="col-span-2 p-2 border rounded" />
                 <input type="text" name="city" placeholder="City" className="col-span-2 p-2 border rounded" />
                 <input type="text" name="pinCode" placeholder="Pin Code" className="col-span-2 p-2 border rounded" />
-                <input type="submit" value="Add Student"  className="col-span-2 px-4 py-2 bg-red-500 rounded text-white font-bold cursor-pointer" />
+                <input type="submit" value="Add Student" className="col-span-2 px-4 py-2 bg-red-500 rounded text-white font-bold cursor-pointer" />
 
             </form>
         </div>
