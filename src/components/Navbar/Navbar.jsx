@@ -7,7 +7,7 @@ import { AuthContext } from "../../Provider/Provider";
 
 
 export default function Navbar() {
-    const { logOut } = useContext(AuthContext);
+    const { logOut, user } = useContext(AuthContext);
     const handleLogOut = () => {
         logOut();
     }
@@ -25,9 +25,9 @@ export default function Navbar() {
             }>
                 <MdOutlineManageAccounts /> <span>Manage Student</span>
             </NavLink>
-            <button onClick={handleLogOut} className="flex gap-2 items-center px-4 py-2 rounded">
+            {user ? <button onClick={handleLogOut} className="flex gap-2 items-center px-4 py-2 rounded">
                 <MdLogout /> <span>Logout</span>
-            </button>
+            </button> : ""}
         </div>
     )
 }

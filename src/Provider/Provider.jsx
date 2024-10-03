@@ -26,8 +26,6 @@ export default function Provider({ children }) {
             .catch();
     }
 
-
-
     useEffect(() => {
         const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
